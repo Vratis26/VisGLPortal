@@ -1,0 +1,70 @@
+﻿@page
+@model WS.Portal.Pages.Visualization.IndexModel
+@{
+}
+<div class="text-center">
+    <div id="main-content-wrapper-src">
+        <div class="container">
+            <h2>Defect visualization</h2>
+            <div class="row">
+                <div class="col">
+                    <label></label>
+                    <input type="text" name="glassName" readonly class="form-control text-center" value="Glass">
+                </div>
+                <div class="col">
+                    <label>Width</label><input id="width" type="text" name="width" readonly class="form-control text-center">
+                </div>
+                <div class="col">
+                    <label>Height</label><input id="height" type="text" name="height" readonly class="form-control text-center">
+                </div>
+                <div class="col">
+                    <label>Date of Control</label><input id="dateOfControl" type="text" name="dateOfControl" readonly class="form-control text-center">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+                    <label>Serial Number</label><input id="serialNum" type="text" name="serialNum" readonly class="form-control text-center">
+                </div>
+                <div class="col">
+                    <label>Packaging Number</label><input id="packNum" type="text" name="packNum" readonly class="form-control text-center">
+                </div>
+                <div class="col">
+                    <label>Ded. Area</label><input id="dedArea" type="text" name="dedArea" readonly class="form-control text-center">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+                    <label>Product Code</label><input id="code" type="text" name="code" readonly class="form-control text-center">
+                </div>
+                <div class="col">
+                </div>
+                <div class="col">
+                    <label>Quality</label><input id="quality" type="text" name="quality" readonly class="form-control text-center">
+                </div>
+            </div>
+        </div>
+        <main class="pure-u-1 animated fadeIn mt-5">
+            <section class="section-wrapper">
+                <article class="content-main-wrapper">
+                    <canvas class="mb-4" id="src"></canvas>
+                </article>
+            </section>
+        </main>
+        <div class="container">
+            <div class="row">
+                <div class="col text-left">
+                    <button class="btn btn-lg btn-danger mr-5" onclick="resetAllGlass()">Resetovat data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script src="~/js/visualisationScreen.js"></script>
+<script src="~/microsoft-signalr/signalr.js"></script>
+<script src="~/js/SignalRClient.js"></script>
+}

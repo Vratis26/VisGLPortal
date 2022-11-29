@@ -1,0 +1,183 @@
+﻿@page "{id:Guid}"
+@model WS.Portal.Pages.Edit.EditModel
+@{
+}
+
+@if(Model.glassToVizu != null && Model.glassToVizu.glass != null){
+    <div class="text-center">
+        <div id="main-content-wrapper-src">
+            <div class="container">
+                <h2 class="text-center"> Defect editing </h2>
+                <div class="row">
+                    <div class="col">
+                        <label></label>
+                        <input type="text" name="glassName" readonly class="form-control text-center" value="Glass">
+                    </div>
+                    <div class="col">
+                        <label>Width</label>@Html.TextBoxFor(m => m.glassToVizu.glass.Width, new { @readonly = true, @class = "form-control text-center" })
+                    </div>
+                    <div class="col">
+                        <label>Height</label>@Html.TextBoxFor(m => m.glassToVizu.glass.Height, new { @readonly = true, @class = "form-control text-center" })
+                    </div>
+                    <div class="col">
+                        <label>Date of Control</label>@Html.TextBoxFor(m => m.glassToVizu.glass.ControlDate, new { @readonly = true, @class = "form-control text-center" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                        <label>Serial Number</label>@Html.TextBoxFor(m => m.glassToVizu.glass.SerialNum, new { @readonly = true, @class = "form-control text-center" })
+                    </div>
+                    <div class="col">
+                        <label>Packaging Number</label>@Html.TextBoxFor(m => m.glassToVizu.glass.PackNum, new { @class = "form-control text-center", @id = "packNum" })
+                    </div>
+                    <div class="col">
+                        <label>Ded. Area</label>@Html.TextBoxFor(m => m.glassToVizu.glass.DedArea, new { @readonly = true, @class = "form-control text-center" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                        <label>Product Code</label>@Html.TextBoxFor(m => m.glassToVizu.glass.Code, new { @class = "form-control text-center", @id = "code"})
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                        <label>Quality</label>@Html.TextBoxFor(m => m.glassToVizu.glass.Quality, new { @readonly = true, @class = "form-control text-center" })
+                    </div>
+                </div>
+                <hr>
+                <div class="row mt-1">
+                    <div class="col-3">
+                        <button id="deleteButtonTop" class="btn btn-outline-secondary btn-lg border border-secondary w-100">
+                            Delete component
+                        </button>
+                    </div>
+                    <div class="col-3">
+                        <button id="addPointTop" class="btn btn-outline-danger btn-lg border border-danger w-100">
+                            Add point defect
+                        </button>
+                    </div>
+                    <div class="col-3">
+                        <button id="addAreaTop" class="btn btn-outline-warning btn-lg border border-warning w-100">
+                            Add area defect
+                        </button>
+                    </div>
+                    <div class="col-3">
+                        <button id="addEdgeTop" class="btn btn-outline-primary btn-lg border border-primary w-100">
+                            Add marginal defect
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <main class="pure-u-1 animated fadeIn mt-3">
+                <section class="section-wrapper">
+                    <article class="content-main-wrapper">
+                        <canvas id="src"></canvas>
+                    </article>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="main-content-wrapper">
+            <div class="row mt-5">
+                <div class="col-3">
+                    <button id="deleteButtonBottom" class="btn btn-lg btn-outline-secondary border border-secondary w-100">
+                        Delete component
+                    </button>
+                </div>
+                <div class="col-3">
+                    <button id="addPointBottom" class="btn btn-outline-danger btn-lg border border-danger w-100">
+                        Add point defect
+                    </button>
+                </div>
+                <div class="col-3">
+                    <button id="addAreaBottom" class="btn btn-outline-warning btn-lg border border-warning w-100">
+                        Add area defect
+                    </button>
+                </div>
+                <div class="col-3">
+                    <button id="addEdgeBottom" class="btn btn-outline-primary btn-lg border border-primary w-100">
+                        Add marginal defect
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-3">
+                    @Html.ActionLink("Back", "Index", "Edit", null, new { @class = "btn btn-primary btn-lg w-100" })
+                </div>
+                <div class="col">
+                </div>
+                <div class="col">
+                </div>
+                <div class="col-3">
+                    <button onclick="saveToDb()" id="saveToDb" class="btn btn-success btn-lg w-100">
+                        "Save"
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if ((bool)ViewData["message"])
+    {
+        <div id="successModalMessage" class="modal">
+
+            <div class="modal-content-error alert alert-success text-center" id="successModalMessage">
+                <div id="succesText" class="text-center">Data received successfully<br /><small>Check the printer with a printout</small></div>
+            </div>
+        </div>
+    }
+    <div id="coordinateModal" class="modal-coordinates">
+        <div class="alert alert-primary border border-primary" id="coordinateModelText"></div>
+    </div>
+    @section Scripts{
+    <script src="~/js/editScreen.js"></script>
+    <script>
+        console.log("iik");
+        //typ, bodX (x, y), bodY (x, y)
+        //typ - DEFS - plocha; DEFP - bod; DEFT - hrana
+
+        json = @Html.Raw(Model.glassToVizu.json);
+
+
+            @if ((bool)ViewData["message"])
+            {
+                <text>
+                    document.getElementById("successModalMessage").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("successModalMessage").style.display = "none";
+                }, 10000);
+                </text>
+            }
+
+            function saveToDb() {
+                json.glass.Code = document.getElementById("code").value;
+                json.glass.PackNum = document.getElementById("packNum").value;
+                console.log(json);
+                var strJson = JSON.stringify(json);
+                $.ajax({
+                    url: `?handler=SavePoints`,
+                    type: "GET",
+                    dataType: "json",
+                    data: { json: strJson },
+                    crossDomain: true,
+                    success: function (returnData) {
+                    }
+                });
+            }
+        </script>
+    }
+}else {
+    <div class="container">
+        <div id="main-content-wrapper">
+            <div class="text text-danger">
+                Can not find the glass
+            </div>
+        </div>
+    </div>
+}
+
